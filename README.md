@@ -1,2 +1,2 @@
 # Tiga
-Tiga 一个轻量级gRPC业务框架
+Tiga 一个轻量级REST业务框架
