@@ -1,82 +1,85 @@
-package jwt
+package database
 
 import (
 	"time"
 
-	"moocss.com/tiga/pkg/base64"
-	"moocss.com/tiga/pkg/conf"
 	"moocss.com/tiga/pkg/log"
 	"moocss.com/tiga/pkg/log/stdlog"
 )
 
-var (
-	SignKey     string = "Z3d0X3NpZ25fa2V5" // gwt_sign_key
-	ExpiresTime int64  = 172800             // 2h
-)
-
-// Option is jwt option
+// Option is database option
 type Option func(*options)
 
 type options struct {
-	signingKey  []byte // 签名 signkey
-	expiresTime int64  // 过期时间
+	dialect         string        // mysql|sqlite3|postgres, default:"mysql"
+	dsn             string        // "foo:bar@tcp(127.0.0.1:3306)/baz?charset=utf8&parseTime=True&loc=Local"
+	maxOpenConns    int           // default: 100
+	maxIdleConns    int           // default: 10
+	connMaxLifetime time.Duration // default: 1h
+	logging         bool          // default: "false"
 
 	logger log.Logger
 }
 
 // DefaultOptions .
 func DefaultOptions() *options {
-	signingKey := getSignKey()
-	expiresTime := getExpiresTime()
 	return &options{
-		signingKey:  signingKey,
-		expiresTime: expiresTime,
-		logger:      stdlog.NewLogger(),
+		dialect:         "mysql",
+		dsn:             "",
+		maxOpenConns:    100,
+		maxIdleConns:    10,
+		connMaxLifetime: 10 * time.Minute,
+		logging:         false,
+
+		logger: stdlog.NewLogger(),
 	}
 }
 
-// WithSigningKey .
-func WithSigningKey(key []byte) Option {
+// Dialect with database Dialect.
+func Dialect(dialect string) Option {
 	return func(o *options) {
-		o.signingKey = key
+		o.dialect = dialect
 	}
 }
 
-// WithExpiresTime .
-func WithExpiresTime(t int64) Option {
+// DSN with database DSN.
+func DSN(dsn string) Option {
 	return func(o *options) {
-		o.expiresTime = t
+		o.dsn = dsn
 	}
 }
 
-// WithLogger with config loogger.
+// MaxOpenConns with database MaxOpenConns.
+func MaxOpenConns(moc int) Option {
+	return func(o *options) {
+		o.maxOpenConns = moc
+	}
+}
+
+// Dsn with database MaxIdleConns.
+func MaxIdleConns(mic int) Option {
+	return func(o *options) {
+		o.maxIdleConns = mic
+	}
+}
+
+// Dsn with database ConnMaxLifetime.
+func ConnMaxLifetime(cml time.Duration) Option {
+	return func(o *options) {
+		o.connMaxLifetime = cml
+	}
+}
+
+// Dsn with database Logging.
+func Logging(logging bool) Option {
+	return func(o *options) {
+		o.logging = logging
+	}
+}
+
+// WithLogger with database loogger.
 func WithLogger(l log.Logger) Option {
 	return func(o *options) {
 		o.logger = l
 	}
-}
-
-// getSignKey 获取signing key
-func getSignKey() []byte {
-	signingKey := conf.Get("app.jwt.secret")
-	if len(signingKey) == 0 {
-		signingKey = signingKey // 默认signing key
-	}
-
-	// 恢复到原始的 signing key 值, 例如: gwt_sign_key
-	s, err := base64.Base64UrlDecode(signingKey)
-	if err != nil {
-		return nil
-	}
-	return s
-}
-
-// getExpiresTime 获取过期时间
-func getExpiresTime() int64 {
-	jTime := conf.GetInt64("app.jwt.expire")
-	if jTime == 0 {
-		jTime = ExpiresTime
-	}
-
-	return time.Now().Add(time.Duration(jTime) * time.Second).Unix()
 }

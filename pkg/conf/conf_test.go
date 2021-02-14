@@ -20,7 +20,7 @@ func testConfig(t *testing.T, c Config) {
 		t.Error(err)
 	}
 	v, _ := Sub("database")
-	dsn := v.Get("dsn")
+	dsn := v.GetString("dsn")
 	t.Logf("mode: %s", dsn)
 	mode := Get("app.mode")
 	t.Logf("mode: %s", mode)

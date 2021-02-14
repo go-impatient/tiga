@@ -56,7 +56,8 @@ func (c *config) Load() error {
 			if !strings.HasSuffix(f, ".yaml") {
 				continue
 			}
-			c.log.Infof("配置文件: %s", f)
+
+			c.log.Infof("读取到的配置文件: %s", f)
 
 			v := viper.New()
 			// Config's format: "json" | "toml" | "yaml" | "yml"
