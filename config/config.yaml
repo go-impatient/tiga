@@ -1,0 +1,16 @@
+# 扩展功能
+features:
+  metrics: # prometheus
+    address: 127.0.0.1:8125
+    flush_interval: 1000000000
+    enabled: false
+  tracing: # jaeger
+    address: 127.0.0.1:6831
+    flush_interval: 5000000000
+    sampler_param: 1
+    enabled: false
+  job:
+    enabled: false
+  nsq:
+    host: "localhost"
+    port: 4151
