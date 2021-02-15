@@ -6,7 +6,7 @@ import (
 )
 
 func TestApp(t *testing.T) {
-	app := NewApp(
+	app := New(
 		Version("v1.0.0"),
 	)
 	time.AfterFunc(time.Second, func() {

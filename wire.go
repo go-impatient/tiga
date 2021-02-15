@@ -2,10 +2,11 @@
 
 // The build tag makes sure the stub is not built in the final build.
 
-package app
+package main
 
 import (
 	"github.com/google/wire"
+	"moocss.com/tiga/app"
 
 	"moocss.com/tiga/internal/biz"
 	"moocss.com/tiga/internal/data"
@@ -14,7 +15,7 @@ import (
 )
 
 // InitApp init application dependency injection.
-func InitApp(logger log.Logger) (*service.Services, error) {
+func InitApp(logger log.Logger) (*app.App, error) {
 	panic(wire.Build(
 		data.ProviderSet,
 		biz.ProviderSet,

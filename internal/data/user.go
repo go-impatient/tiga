@@ -1,9 +1,9 @@
-package user
+package data
 
 import (
 	"context"
 
-	"gorm.io/gorm"
+	"github.com/pkg/errors"
 
 	"moocss.com/tiga/internal/biz"
 	"moocss.com/tiga/pkg/log"
@@ -11,15 +11,15 @@ import (
 
 // userRepository struct
 type userRepo struct {
-	db  *gorm.DB
-	log *log.Helper
+	data *Data
+	log  *log.Helper
 }
 
 // NewUserRepo returns an instance of `userRepo`.
-func NewUserRepo(db *gorm.DB, logger log.Logger) biz.UserRepo {
+func NewUserRepo(data *Data, logger log.Logger) biz.UserRepo {
 	return &userRepo{
-		db:  db,
-		log: log.NewHelper("user_repository", logger),
+		data: data,
+		log:  log.NewHelper("user_repository", logger),
 	}
 }
 
@@ -36,16 +36,31 @@ func (r *userRepo) List(ctx context.Context, limit, page int, sort string, user 
 
 func (r *userRepo) Get(ctx context.Context, id int) (*biz.User, error) {
 	r.log.Info("Received UserRepository.Get")
+	_, ok := r.data.DB.Get(string(id))
+	if !ok {
+		return nil, errors.New("查询成功")
+	}
+
 	return nil, nil
 }
 
 func (r *userRepo) Create(ctx context.Context, user *biz.User) (*biz.User, error) {
 	r.log.Info("Received UserRepository.Create")
-	return nil, nil
+
+	po := user.UserToPO()
+	if err := r.data.DB.Create(po).Error; err != nil {
+		return nil, err
+	}
+
+	return user, nil
 }
 
 func (r *userRepo) Update(ctx context.Context, user *biz.User) (*biz.User, error) {
 	r.log.Info("Received UserRepository.Update")
+	// po := user.UserToPO()
+	// if err := r.data.DB.Model(po).Where("id = ? AND is_deleted = ?", user.ID, 0).Updates(po).Error; err != nil {
+	// 	return nil, err
+	// }
 	return nil, nil
 }
 
@@ -56,6 +71,9 @@ func (r *userRepo) DeleteFull(ctx context.Context, user *biz.User) (*biz.User, e
 
 func (r *userRepo) Delete(ctx context.Context, id int) (*biz.User, error) {
 	r.log.Info("Received UserRepository.Delete")
+	// if err := r.data.DB.Where("id = ? AND is_deleted = ?", id, 0).Delete(schema.User{}).Error; err != nil {
+	// 	return nil, err
+	// }
 	return nil, nil
 }
 

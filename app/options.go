@@ -2,12 +2,12 @@ package app
 
 import (
 	"context"
-	"moocss.com/tiga/pkg/server"
 	"os"
 	"syscall"
 
 	"moocss.com/tiga/pkg/log"
 	"moocss.com/tiga/pkg/log/stdlog"
+	"moocss.com/tiga/pkg/server"
 )
 
 // Option is an application option.

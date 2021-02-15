@@ -4,6 +4,10 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+
+	"moocss.com/tiga/app/handler"
+	"moocss.com/tiga/app/middleware"
+	"moocss.com/tiga/internal/service"
 )
 
 func rootHandler(c *gin.Context) {
@@ -23,15 +27,21 @@ func NotFound() gin.HandlerFunc {
 }
 
 // RegisterRoutes ...
-func RegisterRoutes(router *gin.Engine) {
+func RegisterRoutes(router *gin.Engine , services *service.Services) {
 	// 使用中间件.
 	router.Use(gin.Logger())
 	router.Use(gin.Recovery())
+	router.Use(middleware.Handler())
+	router.Use(middleware.NoCache)
+	router.Use(middleware.Options)
+	router.Use(middleware.Secure)
+	router.Use(middleware.RequestId())
 
 	// 404 Handler.
 	router.NoRoute(NotFound())
 
 	router.GET("/", rootHandler)
 
-	// 其它路由组
+	// user 路由组
+	handler.MakeUserHandler(router, services)
 }
