@@ -3,10 +3,12 @@ package app
 import (
 	"context"
 	"errors"
-	"golang.org/x/sync/errgroup"
-	"moocss.com/tiga/pkg/log"
 	"os"
 	"os/signal"
+
+	"golang.org/x/sync/errgroup"
+
+	"moocss.com/tiga/pkg/log"
 )
 
 // App .
@@ -18,7 +20,7 @@ type App struct {
 }
 
 // New .
-func NewApp(opts ...Option) *App {
+func New(opts ...Option) *App {
 	options := DefaultOptions()
 	for _, o := range opts {
 		o(options)
