@@ -72,9 +72,9 @@ type Database interface {
 
 // database 基本数据结构
 type database struct {
-	opts *options
-	orm  *gorm.DB
-	log  *log.Helper
+	opts     *options
+	instance *gorm.DB
+	log      *log.Helper
 }
 
 // NewDatabase new a database with options.
@@ -91,22 +91,22 @@ func NewDatabase(opts ...Option) Database {
 }
 
 func (db *database) Init() (*gorm.DB, error) {
-	orm, err := db.connected()
+	instance, err := db.connected()
 	if err != nil {
 		return nil, err
 	}
 
 	// Initializer functions are meant to modify a connection settings
 	for _, initializer := range initializers {
-		initializer(orm)
+		initializer(instance)
 	}
 
-	defaultSQL = orm
-	sqlMap.Store("default", orm)
+	defaultSQL = instance
+	sqlMap.Store("default", instance)
 
-	db.orm = orm
+	db.instance = instance
 
-	return orm, nil
+	return instance, nil
 }
 
 // Close the database connections if they exist.
@@ -114,7 +114,7 @@ func (db *database) Close() error {
 	mu.Lock()
 	defer mu.Unlock()
 
-	sqlDB, err := db.orm.DB()
+	sqlDB, err := db.instance.DB()
 	if err != nil {
 		return errors.Wrap(err, "disconnect from database failed")
 	}
@@ -262,7 +262,7 @@ func GetDatabase(name ...string) *gorm.DB {
 
 // Migrate migrates all registered models.
 func (db *database) Migrate() error {
-	if err := db.orm.AutoMigrate(models...); err != nil {
+	if err := db.instance.AutoMigrate(models...); err != nil {
 		return errors.Wrap(err, "bcrypt migrate tables failed")
 	}
 
@@ -272,8 +272,8 @@ func (db *database) Migrate() error {
 // creates necessary database tables
 func (db *database) CreateTables() error {
 	for _, model := range models {
-		if !db.orm.Migrator().HasTable(model) {
-			if err := db.orm.Migrator().CreateTable(model); err != nil {
+		if !db.instance.Migrator().HasTable(model) {
+			if err := db.instance.Migrator().CreateTable(model); err != nil {
 				return errors.Wrap(err, "create table failed")
 			}
 		}
@@ -283,7 +283,7 @@ func (db *database) CreateTables() error {
 }
 
 func (db *database) DeleteTables(Models []interface{}) error {
-	if err := db.orm.Migrator().DropTable(Models...); err != nil {
+	if err := db.instance.Migrator().DropTable(Models...); err != nil {
 		return errors.Wrap(err, "delete table failed")
 	}
 	return nil

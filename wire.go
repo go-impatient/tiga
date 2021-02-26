@@ -14,6 +14,7 @@ import (
 	"moocss.com/tiga/pkg/log"
 )
 
+//go:generate wire
 // InitApp init application dependency injection.
 func InitApp(logger log.Logger) (*app.App, error) {
 	panic(wire.Build(

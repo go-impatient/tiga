@@ -27,7 +27,7 @@ func NotFound() gin.HandlerFunc {
 }
 
 // RegisterRoutes ...
-func RegisterRoutes(router *gin.Engine , services *service.Services) {
+func RegisterRoutes(router *gin.Engine, services *service.Services) {
 	// 使用中间件.
 	router.Use(gin.Logger())
 	router.Use(gin.Recovery())

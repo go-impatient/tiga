@@ -61,7 +61,7 @@ func (c *config) Load() error {
 
 			v := viper.New()
 			// Config's format: "json" | "toml" | "yaml" | "yml"
-			v.SetConfigType("yaml")
+			// v.SetConfigType("yaml")
 			v.SetConfigFile(f)
 			if err := v.ReadInConfig(); err != nil {
 				c.log.Warnf("Using config file: %s [%s]\n", viper.ConfigFileUsed(), err)

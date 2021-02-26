@@ -3,7 +3,7 @@ package data
 import (
 	"github.com/google/wire"
 	"gorm.io/gorm"
-	
+
 	"moocss.com/tiga/pkg/conf"
 	"moocss.com/tiga/pkg/database"
 	"moocss.com/tiga/pkg/log"
@@ -28,7 +28,7 @@ func NewData(logger log.Logger) (*Data, error) {
 		database.DSN(dsn),
 	)
 
-	orm, err := db.Init()
+	instance, err := db.Init()
 
 	defer db.Close()
 
@@ -37,5 +37,5 @@ func NewData(logger log.Logger) (*Data, error) {
 		return nil, err
 	}
 
-	return &Data{DB: orm}, nil
+	return &Data{DB: instance}, nil
 }
