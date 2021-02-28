@@ -12,7 +12,6 @@ import (
 	"moocss.com/tiga/pkg/conf"
 	"moocss.com/tiga/pkg/conf/file"
 	"moocss.com/tiga/pkg/log"
-	"moocss.com/tiga/pkg/log/stdlog"
 	"moocss.com/tiga/pkg/server"
 )
 
@@ -54,8 +53,7 @@ func newApp(logger log.Logger, services *service.Services) *app.App {
 
 func main() {
 	flag.Parse()
-	logger := stdlog.NewLogger(stdlog.Writer(os.Stdout))
-	defer logger.Close()
+	logger := log.NewStdLogger(os.Stdout)
 
 	// 1. 初始化配置文件
 	c := conf.New(

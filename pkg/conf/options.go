@@ -3,7 +3,6 @@ package conf
 import (
 	"moocss.com/tiga/pkg/conf/file"
 	"moocss.com/tiga/pkg/log"
-	"moocss.com/tiga/pkg/log/stdlog"
 )
 
 // Option is config option
@@ -17,7 +16,7 @@ type options struct {
 // DefaultOptions .
 func DefaultOptions() *options {
 	return &options{
-		logger: stdlog.NewLogger(),
+		logger: log.DefaultLogger,
 	}
 }
 

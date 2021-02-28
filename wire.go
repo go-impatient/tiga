@@ -6,8 +6,8 @@ package main
 
 import (
 	"github.com/google/wire"
-	"moocss.com/tiga/app"
 
+	"moocss.com/tiga/app"
 	"moocss.com/tiga/internal/biz"
 	"moocss.com/tiga/internal/data"
 	"moocss.com/tiga/internal/service"

@@ -5,7 +5,6 @@ import (
 	"time"
 
 	"moocss.com/tiga/pkg/log"
-	"moocss.com/tiga/pkg/log/stdlog"
 	"moocss.com/tiga/pkg/server/middleware"
 )
 
@@ -22,7 +21,7 @@ type options struct {
 	address string
 
 	// app 超时
-	timeout         time.Duration
+	timeout time.Duration
 
 	// https://medium.com/@simonfrey/go-as-in-golang-standard-net-http-config-will-break-your-production-environment-1360871cb72b
 	readHeaderTimeout time.Duration
@@ -47,7 +46,7 @@ func DefaultOptions() *options {
 		readTimeout:       60 * time.Second,
 		writeTimeout:      120 * time.Second,
 		idleTimeout:       90 * time.Second,
-		logger:            stdlog.NewLogger(),
+		logger:            log.DefaultLogger,
 	}
 }
 

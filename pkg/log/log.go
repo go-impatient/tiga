@@ -1,22 +1,37 @@
 package log
 
+import (
+	"os"
+)
+
+var (
+	// DefaultLogger is default logger.
+	DefaultLogger Logger = NewStdLogger(os.Stderr)
+
+	// LogrusLogger is logrus logger.
+	LogrusLogger Logger = NewLogrusLogger(os.Stderr)
+)
+
 // Logger is a logger interface.
 type Logger interface {
-	Print(kvpair ...interface{})
+	Print(pairs ...interface{})
 }
 
 type logger struct {
-	log    Logger
-	kvpair []interface{}
+	log   Logger
+	pairs []interface{}
 }
 
-func (l *logger) Print(kvpair ...interface{}) {
-	l.log.Print(append(kvpair, l.kvpair...)...)
+func (l *logger) Print(pairs ...interface{}) {
+	l.log.Print(append(pairs, l.pairs...)...)
 }
 
 // With with logger kv pairs.
-func With(log Logger, kvpair ...interface{}) Logger {
-	return &logger{log: log, kvpair: kvpair}
+func With(log Logger, pairs ...interface{}) Logger {
+	if len(pairs) == 0 {
+		return log
+	}
+	return &logger{log: log, pairs: pairs}
 }
 
 // Debug returns a debug logger.

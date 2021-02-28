@@ -6,7 +6,6 @@ import (
 	"syscall"
 
 	"moocss.com/tiga/pkg/log"
-	"moocss.com/tiga/pkg/log/stdlog"
 	"moocss.com/tiga/pkg/server"
 )
 
@@ -27,7 +26,7 @@ type options struct {
 // DefaultOptions .
 func DefaultOptions() *options {
 	return &options{
-		logger: stdlog.NewLogger(),
+		logger: log.DefaultLogger,
 		ctx:    context.Background(),
 		sigs:   []os.Signal{syscall.SIGTERM, syscall.SIGQUIT, syscall.SIGINT},
 	}

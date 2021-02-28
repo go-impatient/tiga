@@ -1,12 +1,9 @@
 package log
 
-import (
-	"os"
-	"testing"
-)
+import "testing"
 
-func TestLogrusLogger(t *testing.T) {
-	logger := NewLogrusLogger(os.Stdout, WithLevel(4))
+func TestFmtLogger(t *testing.T) {
+	logger := DefaultLogger
 
 	Debug(logger).Print("log", "test debug")
 	Info(logger).Print("log", "test info")

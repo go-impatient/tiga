@@ -4,7 +4,6 @@ import (
 	"time"
 
 	"moocss.com/tiga/pkg/log"
-	"moocss.com/tiga/pkg/log/stdlog"
 )
 
 // Option is database option
@@ -31,7 +30,7 @@ func DefaultOptions() *options {
 		connMaxLifetime: 10 * time.Minute,
 		logging:         false,
 
-		logger: stdlog.NewLogger(),
+		logger: log.DefaultLogger,
 	}
 }
 

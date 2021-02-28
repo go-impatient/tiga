@@ -6,7 +6,6 @@ import (
 	"moocss.com/tiga/pkg/base64"
 	"moocss.com/tiga/pkg/conf"
 	"moocss.com/tiga/pkg/log"
-	"moocss.com/tiga/pkg/log/stdlog"
 )
 
 var (
@@ -31,7 +30,7 @@ func DefaultOptions() *options {
 	return &options{
 		signingKey:  signingKey,
 		expiresTime: expiresTime,
-		logger:      stdlog.NewLogger(),
+		logger:      log.DefaultLogger,
 	}
 }
 

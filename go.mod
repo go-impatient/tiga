@@ -13,7 +13,7 @@ require (
 	github.com/pkg/errors v0.9.1
 	github.com/prometheus/client_golang v0.9.3
 	github.com/satori/go.uuid v1.2.0
-	github.com/sirupsen/logrus v1.4.2
+	github.com/sirupsen/logrus v1.8.0
 	github.com/spf13/viper v1.7.1
 	github.com/stretchr/testify v1.5.1
 	github.com/urfave/cli/v2 v2.3.0 // indirect
